@@ -1,7 +1,9 @@
 //declaração caixa
 
 typedef struct Caixa{
-	Cliente *pilhaCliente;
+	Cliente *pilhaClientes;
+	int topo;
+	int tamanho;
 }Caixa;
 
 int definir_pilha(int n, int m);
