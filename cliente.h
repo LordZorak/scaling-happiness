@@ -8,3 +8,5 @@ typedef struct cliente{
 int definir_fila(int n);
 //insere na fila
 int inserir_fila(Cliente cliente);
+//remove primeiro elemento da fila
+Cliente remover_fila();

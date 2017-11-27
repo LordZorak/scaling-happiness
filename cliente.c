@@ -43,8 +43,26 @@ int inserir_fila(Cliente cliente){
 		if(FilaClientes.f==0){
 			FilaClientes.f=1;
 		}
-
+		//fç de overflow. Nesse caso deve-se retirar o primeiro cliente da fila e mover para pilha de atendimento de algum
+		//caixa livre
 	}else{
-		printf("overflow\n");
+		Cliente auxiliar = remover_fila();
+		//falta inserir função para adicionar elemento na pilha
+		inserir_fila(cliente);
+	}
+}
+
+Cliente remover_fila(){
+	printf("fila cheia. adicionando pilha\n");
+	if(FilaClientes.f!=0){
+		Cliente cliente = FilaClientes.mFila[FilaClientes.f-1];
+		if(FilaClientes.f==FilaClientes.r){
+			FilaClientes.f=0;
+			FilaClientes.r=0;
+		}else{
+			FilaClientes.f = FilaClientes.f % FilaClientes.tamanho +1;
+		}
+	}else{
+		printf("underflow");
 	}
 }

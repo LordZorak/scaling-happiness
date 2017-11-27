@@ -23,7 +23,7 @@ int definir_pilha(int n, int m){
 		meus_caixas.caixas[i].topo = 0; //define o topo de cada pilha como 0
 		meus_caixas.caixas[i].tamanho = n/m; //define que o tamanho de cada pilha é n/m
 	}
-	if(!PilhaClientes)
+	if(!meus_caixas.caixas)
 		//erro de alocação!
 		return 0;
 	else
