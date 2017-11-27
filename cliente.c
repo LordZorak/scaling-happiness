@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include "cliente.h"
 #include "caixa.h"
-
-
 //Declaração de uma estrutura de dados paa gerenciar a fila de clientes
 typedef struct minhafila{
 	Cliente *mFila;
@@ -46,7 +44,9 @@ int inserir_fila(Cliente cliente){
 		//fç de overflow. Nesse caso deve-se retirar o primeiro cliente da fila e mover para pilha de atendimento de algum
 		//caixa livre
 	}else{
-		Cliente auxiliar = remover_fila();
+		printf("overflow\n");
+		Cliente clienteASerRemovido = atender_cliente(FilaClientes.mFila[FilaClientes.f-1]); // Chamar a funcao pra atender o cliente (empilhar os dados no caixa) Desalocar o cliente 
+		remover_fila();
 		//falta inserir função para adicionar elemento na pilha
 		inserir_fila(cliente);
 	}
