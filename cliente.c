@@ -28,28 +28,33 @@ int definir_fila(int n){
 
 //fç que insere na fila circular. Em caso de fila cheia, ele remove o primeiro elemento e manda pra pilha de algum caixa;
 int inserir_fila(Cliente cliente){
-	int posicao = FilaClientes.r % FilaClientes.tamanho+1;
-	if(posicao!=FilaClientes.f){
-		FilaClientes.r=posicao;
-		FilaClientes.mFila[FilaClientes.r-1]=cliente;
-		int i;
-		printf("\n\n");
-		for (i=0;i<FilaClientes.tamanho;i++){
-			printf("%d-%d-%d\n",FilaClientes.mFila[i].codigo, FilaClientes.mFila[i].operacao,FilaClientes.mFila[i].valor);
-		}
-		printf("\n\n");
-		if(FilaClientes.f==0){
-			FilaClientes.f=1;
-		}
-		//fç de overflow. Nesse caso deve-se retirar o primeiro cliente da fila e mover para pilha de atendimento de algum
-		//caixa livre
-	}else{
+	if(FilaEstaCheia(FilaClientes)){
 		printf("overflow\n");
-		Cliente clienteASerRemovido = atender_cliente(FilaClientes.mFila[FilaClientes.f-1]); // Chamar a funcao pra atender o cliente (empilhar os dados no caixa) Desalocar o cliente 
+		// Chamar a funcao pra atender o cliente (empilhar os dados no caixa) 
+		atender_cliente(FilaClientes.mFila[FilaClientes.f-1]); 
+		// Desalocar o cliente 
 		remover_fila();
-		//falta inserir função para adicionar elemento na pilha
-		inserir_fila(cliente);
 	}
+	int posicao = FilaClientes.r % FilaClientes.tamanho+1; 
+	FilaClientes.r=posicao;
+	FilaClientes.mFila[FilaClientes.r-1]=cliente;
+	int i;
+
+	printf("\n\n");
+	for (i=0;i<FilaClientes.tamanho;i++){
+		printf("%d-%d-%d\n",FilaClientes.mFila[i].codigo, FilaClientes.mFila[i].operacao,FilaClientes.mFila[i].valor);
+	}
+	printf("\n\n");
+	
+	if(FilaClientes.f==0){
+		FilaClientes.f=1;
+	}
+}
+
+int FilaEstaCheia(minhafila fila){
+	if (fila.f == fila.r % fila.tamanho+1)
+		return 1;
+	return 0;
 }
 
 Cliente remover_fila(){
@@ -66,3 +71,4 @@ Cliente remover_fila(){
 		printf("underflow");
 	}
 }
+	

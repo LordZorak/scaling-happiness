@@ -35,7 +35,7 @@ int definir_pilha(int n, int m){
 		return 1;
 }
 
-Cliente atender_cliente(Cliente cliente){
+void atender_cliente(Cliente cliente){
 
 	printf("Cliente a ser atendido: %d - %d - %d\n", cliente.codigo, cliente.operacao, cliente.valor);
 
@@ -54,7 +54,6 @@ Cliente atender_cliente(Cliente cliente){
 	
 	
 	meus_caixas.ultimo_inserido++;
-	return cliente;
 }
 
 int estaCheia(int topo){
