@@ -8,4 +8,5 @@ typedef struct Caixa{
 
 int definir_pilha(int n, int m);
 void atender_cliente (Cliente cliente); 
-int estaCheia(int topoPilha);
+int PilhaEstaCheia(int topoPilha);
+int PilhaEstaVazia(int topoPilha);
