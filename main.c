@@ -24,4 +24,7 @@ int main(){
 		scanf("%d %d %d", &cliente.codigo, &cliente.operacao, &cliente.valor);
 		inserir_fila(cliente);
 	}
+	processa_dados();
+
+	return 0;
 }

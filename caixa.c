@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include "cliente.h"
 #include "caixa.h"
 
@@ -15,13 +16,14 @@ bateria_caixas meus_caixas;
 int numeroCaixas;
 int numeroClientes; 
 Cliente *PilhaClientes;
+
 int definir_pilha(int n, int m){
 	numeroCaixas = m;
 	numeroClientes = n;
 	meus_caixas.caixas = (Caixa*) malloc(m* sizeof(Caixa)); //aloca quantos caixas tem
 	int i;
 	for(i=0;i<m;i++){
-		meus_caixas.caixas[i].pilhaClientes = (Cliente *) malloc(n/m * sizeof(Cliente)); //aloca cada pilha de cada caixa com n/m;
+		meus_caixas.caixas[i].pilhaClientes = (Cliente *) malloc(ceil(n/m) * sizeof(Cliente)); //aloca cada pilha de cada caixa com n/m;
 		meus_caixas.caixas[i].topo = 0; //define o topo de cada pilha como 0
 		meus_caixas.caixas[i].tamanho = n/m; //define que o tamanho de cada pilha é n/m
 	}
@@ -50,7 +52,7 @@ void atender_cliente(Cliente cliente){
 	meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes->valor = cliente.valor; 
 	meus_caixas.caixas[meus_caixas.ultimo_inserido].topo++;	
 	
-	printf("Cliente atendido\n Dados salvos: %d - %d - %d\n", meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes->codigo, meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes->operacao, meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes->valor); 
+	printf("Cliente atendido\nDados salvos: %d - %d - %d em caixa %d\n", meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes->codigo, meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes->operacao, meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes->valor, meus_caixas.ultimo_inserido); 
 	
 	
 	meus_caixas.ultimo_inserido++;

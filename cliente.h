@@ -8,9 +8,11 @@ typedef struct minhafila minhafila;
 //cria a fila
 int definir_fila(int n);
 //insere na fila
-int inserir_fila(Cliente cliente);
+void inserir_fila(Cliente cliente);
 
 //remove primeiro elemento da fila
 Cliente remover_fila();
-int FilaEstaCheia(minhafila fila);
+
+void processa_dados();
+int fila_vazia();
 
