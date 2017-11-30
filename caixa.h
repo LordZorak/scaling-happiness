@@ -6,3 +6,4 @@ int PilhaEstaCheia(int topoPilha);
 int PilhaEstaVazia(int topoPilha);
 int LimiteDeCaixas(int caixaAtual);
 Cliente desempilharCliente(int CaixaASerDesempilhado);
+int getTopo(int posicao);

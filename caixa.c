@@ -83,4 +83,8 @@ int PilhaEstaVazia(int topo){
 	return (topo < 0);
 }
 
+int getTopo(int posicao){
+	return meus_caixas.caixas[posicao].topo;
+}
+
 
