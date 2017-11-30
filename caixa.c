@@ -21,8 +21,8 @@ bateria_caixas meus_caixas;
 int numeroCaixas;
 int numeroClientes; 
 Cliente *PilhaClientes;
-
-int definir_pilha(int n, int m){
+//Função de definição de tamanho dos campos do struct Caixa e valor inicial
+int definir_pilha(int n, int m){ 
 	numeroCaixas = m;
 	numeroClientes = n;
 	meus_caixas.caixas = (Caixa*) malloc(m* sizeof(Caixa)); //aloca quantos caixas tem
@@ -41,10 +41,10 @@ int definir_pilha(int n, int m){
 		//alocado com sucesso!
 		return 1;
 }
-
+//Função pra atender clientes adicionando o primeiro cliente da fila no topo da pilha do caixa livre
 void atender_cliente(Cliente cliente){
 	
-	if (LimiteDeCaixa(meus_caixas.ultimo_inserido))
+	if (LimiteDeCaixas(meus_caixas.ultimo_inserido))
 			meus_caixas.ultimo_inserido = 0;
 	//printf("Cliente a ser atendido: %d - %d - %d\n", cliente.codigo, cliente.operacao, cliente.valor);
 	if (PilhaEstaCheia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
@@ -54,16 +54,24 @@ void atender_cliente(Cliente cliente){
 	
 	int topo = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1; 
 	//printf("No topo %d \n", topo-1);
-	meus_caixas.caixas[topo-1].pilhaClientes->codigo = cliente.codigo;
-	meus_caixas.caixas[topo-1].pilhaClientes->operacao = cliente.operacao; 
-	meus_caixas.caixas[topo-1].pilhaClientes->valor = cliente.valor;
+	*meus_caixas.caixas[topo-1].pilhaClientes = cliente;
+	/*meus_caixas.caixas[topo-1].pilhaClientes = cliente.operacao; 
+	meus_caixas.caixas[topo-1].pilhaClientes = cliente.valor;*/
 	
 	//printf("Cliente atendido\nDados salvos: %d - %d - %d em caixa %d\n", meus_caixas.caixas[topo-1].pilhaClientes->codigo, meus_caixas.caixas[topo-1].pilhaClientes->operacao, meus_caixas.caixas[topo-1].pilhaClientes->valor, meus_caixas.ultimo_inserido); 	
 	
 	meus_caixas.ultimo_inserido++;
 }
+Cliente desempilharCliente(int CaixaASerDesempilhado){
+	Cliente valorRecuperado; 
+	if(!PilhaEstaVazia(meus_caixas.caixas[CaixaASerDesempilhado].topo)){
+		valorRecuperado = *meus_caixas.caixas[CaixaASerDesempilhado].pilhaClientes;
+		meus_caixas.caixas[CaixaASerDesempilhado].topo -= 1;
+	}
+	return valorRecuperado;
+}
 
-int LimiteDeCaixa(int CaixaAtual){
+int LimiteDeCaixas(int CaixaAtual){
 	return (CaixaAtual == numeroCaixas);
 }
 
@@ -72,7 +80,7 @@ int PilhaEstaCheia(int topo){
 }
 
 int PilhaEstaVazia(int topo){
-	return (topo==0);
+	return (topo < 0);
 }
 
 
