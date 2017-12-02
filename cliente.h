@@ -1,18 +1,18 @@
-typedef struct cliente{
-	int codigo;
-	int operacao;
-	int valor;
-} Cliente;
+#ifndef CLIENTE_H
+#define CLIENTE_H
 
+// Assinaturas das funções e structs de cliente.c
 typedef struct minhafila minhafila;
-//cria a fila
-int definir_fila(int n);
-//insere na fila
-void inserir_fila(Cliente cliente);
+typedef struct cliente Cliente;
 
-//remove primeiro elemento da fila
-Cliente remover_fila();
-
-void processa_dados();
+void definir_fila(int n);
 int fila_vazia();
+void criarCliente(int codigo, int operacao, int valor);
+int FilaCheia();
+void inserir_fila(Cliente cliente);
+Cliente remover_fila();
+void processa_dados();
 
+
+
+#endif

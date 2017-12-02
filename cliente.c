@@ -4,75 +4,84 @@
 #include "cliente.h"
 #include "caixa.h"
 
-
-//Declaração de uma estrutura de dados paa gerenciar a fila de clientes
+// Declaração de um registro pra gerenciar a fila de clientes
 typedef struct minhafila{
 	Cliente *mFila;
-	int f;
-	int r;
+	int frente;
+	int retaguarda;
 	int tamanho;
 }minhafila;
-//definição de variáveis globais
+
+// Declaração de um registro pra facilitar a manipulação de clientes
+typedef struct cliente{
+	int codigo;
+	int operacao;
+	int valor;
+} Cliente;
+
+// Definição de variáveis globais
 minhafila FilaClientes;
-Cliente *teste;
+int posicaoAtual;
 
-//fç de criar fila. Primeiro aloca e define a frente e a retaguarda como 0. A função retorna 1 se obter sucesso, 0 caso contrário
-int definir_fila(int n){
-	FilaClientes.tamanho=floor(sqrt(n));
+/* Função que define o tamanho da fila, respeitando o limite piso de sqrt(N) 
+ * e definindo os controladores da fila (frente e retaguarda) para começarem em 0 */
+void definir_fila(int n){
+	FilaClientes.tamanho = floor(sqrt(n));
 	FilaClientes.mFila = (Cliente *)malloc(FilaClientes.tamanho*sizeof(Cliente));
-	FilaClientes.f=0;
-	FilaClientes.r=0;
-	if(!FilaClientes.mFila){
-		return 0;
-	}else
-		return 1;
+	FilaClientes.frente = 0;
+	FilaClientes.retaguarda = 0;
 }
-//fç que indica se fila ta cheia;
+		
+// Função que verifica se a fila não contém nenhum elemento
 int fila_vazia(){
-	if (FilaClientes.f == 0)
-		return 1;
-	return 0;
+	return (FilaClientes.frente == 0);
 }
 
-//fç que insere na fila circular. Em caso de fila cheia, ele remove o primeiro elemento e manda pra pilha de algum caixa;
+/* Função que cria um novo registro de Cliente atribuindo os inteiros em seus respectivos campos de registros 
+ * e repassa esse novo cliente para a função de inseri-lo na fila  */
+void criarCliente(int codigo, int operacao, int valor){
+	Cliente novo;
+	novo.codigo = codigo;
+	novo.operacao = operacao;
+	novo.valor = valor;
+	inserir_fila(novo);
+}
+
+// Função que verifica se a fila está em sua capacidade máxima 
+int FilaCheia(){
+	posicaoAtual = FilaClientes.retaguarda % FilaClientes.tamanho+1;
+	return (posicaoAtual == FilaClientes.frente);
+}
+
+/* Função que insere o cliente na fila, respeitando as regras de uma fila circular.
+ * Caso a fila encha, no decorrer do programa, o primeiro cliente da fila é removido e inserido na pilha de algum caixa */
 void inserir_fila(Cliente cliente){
-	int posicao = FilaClientes.r % FilaClientes.tamanho+1;
-	if(posicao!=FilaClientes.f){
-		FilaClientes.r=posicao;
-		FilaClientes.mFila[FilaClientes.r-1]=cliente;
-		int i;
-		printf("\n");
-		for (i=0;i<FilaClientes.tamanho;i++){
-			printf("%d-%d-%d\n",FilaClientes.mFila[i].codigo, FilaClientes.mFila[i].operacao,FilaClientes.mFila[i].valor);
-		}
-		printf("\n");
-		if(FilaClientes.f==0){
-			FilaClientes.f=1;
-		}
-		//fç de overflow. Nesse caso deve-se retirar o primeiro cliente da fila e mover para pilha de atendimento de algum
-		//caixa livre
-	}else{
+	if(FilaCheia()){
 		Cliente auxiliar = remover_fila();
 		atender_cliente(auxiliar);
-		inserir_fila(cliente);
 	}
+	FilaClientes.retaguarda=posicaoAtual;
+	FilaClientes.mFila[FilaClientes.retaguarda-1]=cliente;
+	if(fila_vazia())
+		FilaClientes.frente=1;
 }
 
+// Função que remove o primeiro cliente da fila atualizando o controlador da frente e da retaguarda da fila 
 Cliente remover_fila(){
-	printf("fila cheia. adicionando pilha\n");
 	Cliente cliente;
-	if(FilaClientes.f!=0){
-		cliente = FilaClientes.mFila[FilaClientes.f-1];
-		if(FilaClientes.f==FilaClientes.r){
-			FilaClientes.f=0;
-			FilaClientes.r=0;
+	if(!fila_vazia()){
+		cliente = FilaClientes.mFila[FilaClientes.frente-1];
+		if(FilaClientes.frente == FilaClientes.retaguarda){
+			FilaClientes.frente = 0;
+			FilaClientes.retaguarda = 0;
 		}else{
-			FilaClientes.f = FilaClientes.f % FilaClientes.tamanho +1;
+			FilaClientes.frente = FilaClientes.frente % FilaClientes.tamanho +1;
 		}
 	}
 	return cliente;
 }
 
+// Função que percorre a fila toda, após o banco chegar em seu limite de n clientes, atendendo os clientes restantes na fila
 void processa_dados(){
 	while(!fila_vazia()){
 		Cliente auxiliar = remover_fila();

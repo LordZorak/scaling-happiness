@@ -1,7 +1,13 @@
-typedef struct dados DadosCliente;
+typedef struct cliente Cliente;	
 typedef struct relatorio Relatorio;
-Relatorio * alocaNovoElemento(Cliente cliente);
-void efetuarOperacoes(Relatorio relatoriofinal);
-Cliente * pesquisaCliente(Cliente cliente);
-void inserirClienteNaLista(Cliente cliente);
+
 void processarOperacoes();
+Relatorio * alocaNovoElemento(Cliente cliente);
+
+void efetuarOperacoes(Relatorio * rel, Cliente cliente);
+
+Relatorio * pesquisaCliente(Cliente cliente);
+
+void inserirClienteNaLista(Cliente cliente);
+
+void listar();

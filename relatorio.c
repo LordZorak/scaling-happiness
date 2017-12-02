@@ -4,81 +4,106 @@
 #include "caixa.h"
 #include "relatorio.h"
 
-typedef struct dados{
-	Cliente cliente;	
-	int quantidadeOperacoes;
-	int saldoCliente;
-}DadosCliente;
+typedef struct cliente{
+	int codigo;
+	int operacao;
+	int valor;
+} Cliente;
 
 typedef struct relatorio{
-	DadosCliente PilhaCliente;
-	int contadorClientesDistintos;
+	int codigo;	
+	int quantidadeOperacoes;
+	int saldoCliente;
 	struct relatorio * anterior;
 	struct relatorio * proximo;
 }Relatorio;
 
-Relatorio relatorioFinal;
-Relatorio *ultimo, *posterior, *antecessor;
+struct Relatorios{
+	Relatorio *cabeca;
+	int contadorClientesDistintos; 
+	}mRelatorios;
 
 void processarOperacoes(){
-	relatorioFinal.contadorClientesDistintos = 0;
-	int i = 0;
-	while (!LimiteDeCaixas(i)) {
-		while (!PilhaEstaVazia(getTopo(i)){
-			Cliente novo = desempilharCliente(i); 
-			inserirClienteNaLista(novo);
-		}
-		i++;
-	}
+	//int i = 0;
+	//printf(" PAASSSSUIEN POORIA %d", LimiteDeCaixas(i));
+	mRelatorios.cabeca = (Relatorio *)malloc(1*sizeof(Relatorio));
+	mRelatorios.cabeca->codigo = 0;
+	mRelatorios.cabeca->quantidadeOperacoes = 0;
+	mRelatorios.cabeca->saldoCliente = 0;
+	mRelatorios.cabeca->anterior =  NULL;
+	mRelatorios.cabeca->proximo = NULL;
+	mRelatorios.contadorClientesDistintos=0;
+	printf("oasdjaskdj \n"); 
+	//while (LimiteDeCaixas(i)) {
+		//printf("/n+%d-%d+/n", i, getTopo(i));
+		//while (!PilhaEstaVazia(getTopo(i))){
+			//Cliente novo = desempilharCliente(i); 
+			//inserirClienteNaLista(novo);
+		//}
+		//i++;
+	//}
 }
 //Pesquisar o cliente a ser recebido 
 //Se encontrado atualizar dados de saldo(1 = saque(-) ou 0 = deposito(+)) e contadorOperacoes++
 //Senao inserir de modo crescente pelo id e contadorClientesDistintos++
 
 Relatorio* alocaNovoElemento(Cliente cliente){
+	Relatorio *novo;
 	novo = (Relatorio *)malloc(1*sizeof(Relatorio));
-	novo.PilhaCliente.cliente = cliente;
-	novo.PilhaCliente.quantidadeOperacoes = 0;
-	novo.PilhaCliente.saldoCliente = 0;
-	novo.contadorClientesDistintos++;
-	novo.anterior =  NULL;
-	novo.proximo = NULL;
+	novo->codigo = cliente.codigo;
+	novo->quantidadeOperacoes = 0;
+	novo->saldoCliente = 0;
+	novo->anterior =  NULL;
+	novo->proximo = NULL;
 	return novo;
 }
 
-void efetuarOperacoes(Cliente cliente){
-	if(relatorioFinal.PilhaCliente.cliente.operacao == 0){
-		relatorioFinal.PilhaCliente.saldoCliente += relatorioFinal.PilhaCliente.cliente.valor; 
+void efetuarOperacoes(Relatorio *rel, Cliente cliente){
+	if(cliente.operacao == 0){
+		rel->saldoCliente += cliente.valor; 
 	}else{
-		relatorioFinal.PilhaCliente.saldoCliente -= relatorioFinal.PilhaCliente.cliente.valor;
+		rel->saldoCliente -= cliente.valor;
 	}
-	relatorioFinal.PilhaCliente.quantidadeOperacoes++;
+	rel->quantidadeOperacoes++;
 }	
 
-Relatorio * pesquisaCliente(Cliente cliente){
-	ultimo = relatorioFinal.anterior;
-	if (cliente.codigo <= ultimo.PilhaCliente.cliente.codigo){
-		posterior = relatorioFinal.proximo; 
-		while(posterior.PilhaCliente.cliente.codigo < cliente.codigo){
-			posterior = posterior.proximo;  
+Relatorio* pesquisaCliente(Cliente cliente){
+	Relatorio *ultimo;
+	ultimo = mRelatorios.cabeca->anterior;
+	Relatorio *n_encontrou=mRelatorios.cabeca;
+	if(cliente.codigo <= ultimo->codigo){
+		Relatorio *ponteiro = mRelatorios.cabeca->proximo;
+		while(ponteiro->codigo < cliente.codigo){
+			ponteiro = ponteiro->proximo;
 		}
-		return posterior;
+	
+		return ponteiro;
 	}else{
-		return relatorioFinal;
+		return n_encontrou;
 	}
-	return NULL;
 }
 
 void inserirClienteNaLista(Cliente cliente){
-	posterior = pesquisaCliente(cliente);
-	if(posterior == relatorioFinal || posterior.PilhaCliente.cliente.codigo != cliente.codigo){
-		antecessor = posterior.anterior;
-		Relatorio novo = alocaNovoElemento(cliente); 
-		novo.anterior = antecessor;
-		novo.proximo = posterior;
-		antecessor->proximo = novo;
-		posterior->anterior = novo;
-	} else{
-		efetuarOperacoes(cliente);
+	Relatorio *ponteiro = pesquisaCliente(cliente);
+	if(ponteiro == mRelatorios.cabeca->anterior || ponteiro->codigo!=cliente.codigo){
+		Relatorio *anterior = ponteiro->anterior;
+		Relatorio *novo = alocaNovoElemento(cliente);
+		novo->quantidadeOperacoes++;
+		efetuarOperacoes(novo, cliente);
+		novo->anterior = anterior;
+		novo->proximo= ponteiro;
+		anterior->proximo = novo;
+		ponteiro->anterior = novo;
+	}else{
+		ponteiro->quantidadeOperacoes++;
+		efetuarOperacoes(ponteiro, cliente);
+	}		
+}
+
+void listar(){
+	Relatorio *auxiliar = mRelatorios.cabeca->proximo;
+	while (auxiliar!=mRelatorios.cabeca){
+		printf ("%d %d %d \n", auxiliar->codigo, auxiliar->quantidadeOperacoes, auxiliar->saldoCliente);
+		auxiliar = auxiliar->proximo;  
 	}
 }
