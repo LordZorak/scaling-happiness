@@ -50,15 +50,17 @@ void definir_pilha(int n, int m){
 
 // Função pra atender clientes adicionando o cliente no topo da pilha do próximo caixa livre sem a capacidade máxima atingida
 void atender_cliente(Cliente cliente){
+	int topo =0;
 	
 	if (LimiteDeCaixas(meus_caixas.ultimo_inserido))
 			meus_caixas.ultimo_inserido = 0;
 
 	if (PilhaEstaCheia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
 		meus_caixas.ultimo_inserido++; 
-	
-	int topo = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1; 
-	*meus_caixas.caixas[topo-1].pilhaClientes = cliente;
+	if (!PilhaEstaVazia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
+		topo = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1; 
+		
+	*meus_caixas.caixas[topo].pilhaClientes = cliente;
 	meus_caixas.ultimo_inserido++;
 }
 
