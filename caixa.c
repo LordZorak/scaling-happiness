@@ -38,7 +38,7 @@ Cliente *PilhaClientes;
 void definir_pilha(int n, int m){ 
 	numeroCaixas = m;
 	numeroClientes = n;
-	meus_caixas.caixas = (Caixa*) malloc(m* sizeof(Caixa)); 
+	meus_caixas.caixas = (Caixa*) malloc (m * sizeof(Caixa)); 
 	int i;
 	for(i=0;i<m;i++){
 		meus_caixas.caixas[i].pilhaClientes = (Cliente *) malloc(ceil(n/m) * sizeof(Cliente)); 
@@ -50,25 +50,24 @@ void definir_pilha(int n, int m){
 
 // Função pra atender clientes adicionando o cliente no topo da pilha do próximo caixa livre sem a capacidade máxima atingida
 void atender_cliente(Cliente cliente){
-
+	int topoAtual;
 	if (LimiteDeCaixas(meus_caixas.ultimo_inserido))
 			meus_caixas.ultimo_inserido = 0;
-	int topo =0;
 
 	if (PilhaEstaCheia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
 		meus_caixas.ultimo_inserido++; 
-
-	topo = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1;
-
-	//printf("*%d-%d*\n", meus_caixas.ultimo_inserido,topo); 
 		
-	meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes[topo-1] = cliente;
+	//	if (!PilhaEstaVazia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
+		topoAtual = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1; 
+		
+	meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes[topoAtual] = cliente;
 	meus_caixas.ultimo_inserido++;
 }
 
 // Função que retira os dados dos clientes atendidos em determinado caixa para a elaboração do relatório final
 Cliente desempilharCliente(int CaixaASerDesempilhado){
 	Cliente valorRecuperado; 
+	
 	if(!PilhaEstaVazia(meus_caixas.caixas[CaixaASerDesempilhado].topo)){
 		valorRecuperado = meus_caixas.caixas[CaixaASerDesempilhado].pilhaClientes[meus_caixas.caixas[CaixaASerDesempilhado].topo];
 		meus_caixas.caixas[CaixaASerDesempilhado].topo -= 1;
@@ -88,13 +87,13 @@ int PilhaEstaCheia(int topo){
 
 // Função que verifica se o caixa atual não contém nenhum atendimento
 int PilhaEstaVazia(int topo){
-	return (topo < 0);
+	return (topo < 1);
 }
 
-int getTopo(int posicao){
+	int getTopo(int posicao){
 	return meus_caixas.caixas[posicao].topo;
 }
-//retorna o topo da fila selecionada
+// Função que retorna o topo da fila selecionada
 int newPilhaVazia(int indice_fila){
 	return meus_caixas.caixas[indice_fila].topo;
 }

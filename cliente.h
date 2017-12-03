@@ -13,6 +13,4 @@ void inserir_fila(Cliente cliente);
 Cliente remover_fila();
 void processa_dados();
 
-
-
 #endif

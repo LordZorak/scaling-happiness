@@ -27,7 +27,7 @@ int posicaoAtual;
  * e definindo os controladores da fila (frente e retaguarda) para começarem em 0 */
 void definir_fila(int n){
 	FilaClientes.tamanho = floor(sqrt(n));
-	FilaClientes.mFila = (Cliente *)malloc(FilaClientes.tamanho*sizeof(Cliente));
+	FilaClientes.mFila = (Cliente *) malloc (FilaClientes.tamanho * sizeof(Cliente));
 	FilaClientes.frente = 0;
 	FilaClientes.retaguarda = 0;
 }
@@ -37,20 +37,20 @@ int fila_vazia(){
 	return (FilaClientes.frente == 0);
 }
 
+// Função que verifica se a fila está em sua capacidade máxima 
+int FilaCheia(){
+	posicaoAtual = FilaClientes.retaguarda % FilaClientes.tamanho+1;
+	return (posicaoAtual == FilaClientes.frente);
+}
+
 /* Função que cria um novo registro de Cliente atribuindo os inteiros em seus respectivos campos de registros 
- * e repassa esse novo cliente para a função de inseri-lo na fila  */
+ * e repassa esse novo cliente para a função de inserir esse novo cliente na fila  */
 void criarCliente(int codigo, int operacao, int valor){
 	Cliente novo;
 	novo.codigo = codigo;
 	novo.operacao = operacao;
 	novo.valor = valor;
 	inserir_fila(novo);
-}
-
-// Função que verifica se a fila está em sua capacidade máxima 
-int FilaCheia(){
-	posicaoAtual = FilaClientes.retaguarda % FilaClientes.tamanho+1;
-	return (posicaoAtual == FilaClientes.frente);
 }
 
 /* Função que insere o cliente na fila, respeitando as regras de uma fila circular.
@@ -60,10 +60,10 @@ void inserir_fila(Cliente cliente){
 		Cliente auxiliar = remover_fila();
 		atender_cliente(auxiliar);
 	}
-	FilaClientes.retaguarda=posicaoAtual;
-	FilaClientes.mFila[FilaClientes.retaguarda-1]=cliente;
+	FilaClientes.retaguarda = posicaoAtual;
+	FilaClientes.mFila[FilaClientes.retaguarda-1] = cliente;
 	if(fila_vazia())
-		FilaClientes.frente=1;
+		FilaClientes.frente = 1;
 }
 
 // Função que remove o primeiro cliente da fila atualizando o controlador da frente e da retaguarda da fila 
@@ -71,12 +71,10 @@ Cliente remover_fila(){
 	Cliente cliente;
 	if(!fila_vazia()){
 		cliente = FilaClientes.mFila[FilaClientes.frente-1];
-		if(FilaClientes.frente == FilaClientes.retaguarda){
-			FilaClientes.frente = 0;
-			FilaClientes.retaguarda = 0;
-		}else{
+		if(FilaClientes.frente == FilaClientes.retaguarda)
+			FilaClientes.retaguarda = FilaClientes.frente = 0;
+		else
 			FilaClientes.frente = FilaClientes.frente % FilaClientes.tamanho +1;
-		}
 	}
 	return cliente;
 }
