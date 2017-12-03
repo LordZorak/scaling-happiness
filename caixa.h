@@ -12,5 +12,6 @@ int LimiteDeCaixas(int caixaAtual);
 int PilhaEstaCheia(int topoPilha);
 int PilhaEstaVazia(int topoPilha);
 int getTopo(int posicao);
+int newPilhaVazia(int indice_fila);
 
 #endif

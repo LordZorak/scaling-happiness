@@ -24,24 +24,23 @@ struct Relatorios{
 	}mRelatorios;
 
 void processarOperacoes(){
-	//int i = 0;
+	int i = 0;
 	//printf(" PAASSSSUIEN POORIA %d", LimiteDeCaixas(i));
 	mRelatorios.cabeca = (Relatorio *)malloc(1*sizeof(Relatorio));
 	mRelatorios.cabeca->codigo = 0;
 	mRelatorios.cabeca->quantidadeOperacoes = 0;
 	mRelatorios.cabeca->saldoCliente = 0;
-	mRelatorios.cabeca->anterior =  NULL;
-	mRelatorios.cabeca->proximo = NULL;
+	mRelatorios.cabeca->anterior =  mRelatorios.cabeca;
+	mRelatorios.cabeca->proximo = mRelatorios.cabeca;
 	mRelatorios.contadorClientesDistintos=0;
-	printf("oasdjaskdj \n"); 
-	//while (LimiteDeCaixas(i)) {
-		//printf("/n+%d-%d+/n", i, getTopo(i));
-		//while (!PilhaEstaVazia(getTopo(i))){
-			//Cliente novo = desempilharCliente(i); 
-			//inserirClienteNaLista(novo);
-		//}
-		//i++;
-	//}
+	while (!LimiteDeCaixas(i)) {
+		while (newPilhaVazia(i)){
+			Cliente novo = desempilharCliente(i);
+			printf("*%d-%d*\n", novo.codigo,i);
+			inserirClienteNaLista(novo);
+		}
+		i++;
+	}
 }
 //Pesquisar o cliente a ser recebido 
 //Se encontrado atualizar dados de saldo(1 = saque(-) ou 0 = deposito(+)) e contadorOperacoes++
@@ -70,7 +69,7 @@ void efetuarOperacoes(Relatorio *rel, Cliente cliente){
 Relatorio* pesquisaCliente(Cliente cliente){
 	Relatorio *ultimo;
 	ultimo = mRelatorios.cabeca->anterior;
-	Relatorio *n_encontrou=mRelatorios.cabeca;
+	Relatorio *n_encontrou = mRelatorios.cabeca;
 	if(cliente.codigo <= ultimo->codigo){
 		Relatorio *ponteiro = mRelatorios.cabeca->proximo;
 		while(ponteiro->codigo < cliente.codigo){
@@ -102,8 +101,8 @@ void inserirClienteNaLista(Cliente cliente){
 
 void listar(){
 	Relatorio *auxiliar = mRelatorios.cabeca->proximo;
-	while (auxiliar!=mRelatorios.cabeca){
-		printf ("%d %d %d \n", auxiliar->codigo, auxiliar->quantidadeOperacoes, auxiliar->saldoCliente);
-		auxiliar = auxiliar->proximo;  
-	}
+	//while (auxiliar!=mRelatorios.cabeca){
+	printf ("%d %d %d \n", auxiliar->codigo, auxiliar->quantidadeOperacoes, auxiliar->saldoCliente);
+	//	auxiliar = auxiliar->proximo;  
+	//}
 }

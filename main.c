@@ -24,7 +24,7 @@ int main(){
 	processa_dados();
 	
 	processarOperacoes(); 
-	//listar(); 
+	listar(); 
 
 	return 0;
 }
