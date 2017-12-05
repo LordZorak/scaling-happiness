@@ -3,6 +3,7 @@
 #include "cliente.h"
 #include "caixa.h"
 #include "relatorio.h"
+
 // Declaração de um registro Cliente pra facilitar a manipulação de clientes
 typedef struct cliente{
 	int codigo;
@@ -12,9 +13,9 @@ typedef struct cliente{
 
 // Declaração de um registro Relatorio para facilitar a exibição da resposta final
 typedef struct relatorio{
-	int codigo;	
-	int quantidadeOperacoes;
-	int saldoCliente;
+	long long int codigo;	
+	long long int quantidadeOperacoes;
+	long long int saldoCliente;
 	struct relatorio * anterior;
 	struct relatorio * proximo;
 }Relatorio;
@@ -26,7 +27,7 @@ struct Relatorios{
 }mRelatorios;
  
 // Função de alocação de uma lista relatório na memória
-void definir_lista(){
+void definirLista(){
 	mRelatorios.cabeca = (Relatorio *) malloc(1 * sizeof(Relatorio));
 	mRelatorios.cabeca->codigo = 0;
 	mRelatorios.cabeca->quantidadeOperacoes = 0;
@@ -39,9 +40,9 @@ void definir_lista(){
 // Função que desempilha todos os caixas, um por vez, e insere os dados dos clientes na lista 
 void processarOperacoes(){
 	int i = 0;
-	definir_lista();
-	while (!LimiteDeCaixas(i)) {
-		while (newPilhaVazia(i)){
+	definirLista();
+	while (!limiteDeCaixas(i)) {
+		while (getTopo(i)){
 			Cliente novo = desempilharCliente(i);
 			inserirClienteNaLista(novo);
 		}
@@ -61,20 +62,16 @@ Relatorio* alocaNovoElemento(Cliente cliente){
 	return novo;
 }
 
-// Função que efetua as operações do cliente e atualiza sua quantidade 
+// Função que efetua as operações, e atualiza sua quantidade, do cliente  
 void efetuarOperacoes(Relatorio *rel, Cliente cliente){
-	if(cliente.operacao == 0){
+	if(cliente.operacao == 0)
 		rel->saldoCliente += cliente.valor;
-		//printf("%d-", cliente.valor);
-	}
-	else{
+	else
 		rel->saldoCliente -= cliente.valor;
-		//printf("%d-", cliente.valor);
-	}
 	rel->quantidadeOperacoes++;
 }	
 
-// Função que pesquisa se um cliente já existe na lista
+// Função que verifica se um cliente já existe na lista
 Relatorio* pesquisaCliente(Cliente cliente){
 	Relatorio *ultimo;
 	ultimo = mRelatorios.cabeca->anterior;
@@ -93,7 +90,7 @@ Relatorio* pesquisaCliente(Cliente cliente){
 // Função que insere um cliente na lista caso não exista um registro anterior. Caso exista o atualiza
 void inserirClienteNaLista(Cliente cliente){
 	Relatorio *ponteiro = pesquisaCliente(cliente);
-	if(/*ponteiro == mRelatorios.cabeca->anterior ||*/ ponteiro->codigo!=cliente.codigo){
+	if(ponteiro->codigo!=cliente.codigo){
 		Relatorio *anterior = ponteiro->anterior;
 		Relatorio *novo = alocaNovoElemento(cliente);
 		efetuarOperacoes(novo, cliente);
@@ -107,12 +104,12 @@ void inserirClienteNaLista(Cliente cliente){
 	}		
 }
 
-// Função que enumera todos os registros da lista 
+// Função que enumera todos os registros da lista, mostrando o relatório final da agência 
 void listar(){
 	Relatorio *auxiliar = mRelatorios.cabeca->proximo;
 	printf("%d\n", mRelatorios.contadorClientesDistintos);
 	while (auxiliar!=mRelatorios.cabeca){
-		printf ("%d %d %d \n", auxiliar->codigo, auxiliar->quantidadeOperacoes, auxiliar->saldoCliente);
+		printf ("%lld %lld %lld\n", auxiliar->codigo, auxiliar->quantidadeOperacoes, auxiliar->saldoCliente);
 		auxiliar = auxiliar->proximo;  
 	}
 }

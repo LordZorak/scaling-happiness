@@ -5,13 +5,12 @@
 typedef struct cliente Cliente;
 typedef struct Caixa Caixa;
 
-void definir_pilha(int n, int m);
-void atender_cliente (Cliente cliente); 
+void definirPilha(int n, int m);
+void atenderCliente (Cliente cliente); 
 Cliente desempilharCliente(int CaixaASerDesempilhado);
-int LimiteDeCaixas(int caixaAtual);
-int PilhaEstaCheia(int topoPilha);
-int PilhaEstaVazia(int topoPilha);
+int limiteDeCaixas(int caixaAtual);
+int pilhaEstaCheia(int topoPilha);
+int pilhaEstaVazia(int topoPilha);
 int getTopo(int posicao);
-int newPilhaVazia(int indice_fila);
 
 #endif

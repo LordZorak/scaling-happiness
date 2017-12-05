@@ -35,7 +35,7 @@ Cliente *PilhaClientes;
 /* Função que define a quantidade e capacidade máxima dos caixas, 
  * respeitando o limite teto da capacidade de (N/M) e o limite de quantidade de M caixas
  * e definindo os controladores das pilhas de cada caixa (topo) para começarem em 0 */
-void definir_pilha(int n, int m){ 
+void definirPilha(int n, int m){ 
 	numeroCaixas = m;
 	numeroClientes = n;
 	meus_caixas.caixas = (Caixa*) malloc (m * sizeof(Caixa)); 
@@ -50,16 +50,15 @@ void definir_pilha(int n, int m){
 }
 
 // Função pra atender clientes adicionando o cliente no topo da pilha do próximo caixa livre sem a capacidade máxima atingida
-void atender_cliente(Cliente cliente){
+void atenderCliente(Cliente cliente){
 	int topoAtual;
-	if (LimiteDeCaixas(meus_caixas.ultimo_inserido))
+	if (limiteDeCaixas(meus_caixas.ultimo_inserido))
 			meus_caixas.ultimo_inserido = 0;
 
-	if (PilhaEstaCheia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
+	if (pilhaEstaCheia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
 		meus_caixas.ultimo_inserido++; 
-		
-	//	if (!PilhaEstaVazia(meus_caixas.caixas[meus_caixas.ultimo_inserido].topo))
-		topoAtual = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1; 
+	
+	topoAtual = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1; 
 		
 	meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes[topoAtual] = cliente;
 	meus_caixas.ultimo_inserido++;
@@ -69,7 +68,7 @@ void atender_cliente(Cliente cliente){
 Cliente desempilharCliente(int CaixaASerDesempilhado){
 	Cliente valorRecuperado; 
 	
-	if(!PilhaEstaVazia(meus_caixas.caixas[CaixaASerDesempilhado].topo)){
+	if(!pilhaEstaVazia(meus_caixas.caixas[CaixaASerDesempilhado].topo)){
 		valorRecuperado = meus_caixas.caixas[CaixaASerDesempilhado].pilhaClientes[meus_caixas.caixas[CaixaASerDesempilhado].topo];
 		meus_caixas.caixas[CaixaASerDesempilhado].topo -= 1;
 	}
@@ -77,24 +76,21 @@ Cliente desempilharCliente(int CaixaASerDesempilhado){
 }
 
 // Função que verifica se o caixa atual está no limite de M caixas
-int LimiteDeCaixas(int CaixaAtual){
+int limiteDeCaixas(int CaixaAtual){
 	return (CaixaAtual == numeroCaixas);
 }
 
 // Função que verifica se o caixa atual está dentro da capacidade máxima de N/M clientes atendidos
-int PilhaEstaCheia(int topo){
+int pilhaEstaCheia(int topo){
 	return (topo > meus_caixas.caixas[meus_caixas.ultimo_inserido].tamanho);
 }
 
 // Função que verifica se o caixa atual não contém nenhum atendimento
-int PilhaEstaVazia(int topo){
+int pilhaEstaVazia(int topo){
 	return (topo < 1);
 }
 
-	int getTopo(int posicao){
-	return meus_caixas.caixas[posicao].topo;
-}
 // Função que retorna o topo da fila selecionada
-int newPilhaVazia(int indice_fila){
-	return meus_caixas.caixas[indice_fila].topo;
+int getTopo(int posicao){
+	return meus_caixas.caixas[posicao].topo;
 }

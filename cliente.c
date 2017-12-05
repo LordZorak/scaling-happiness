@@ -25,7 +25,7 @@ int posicaoAtual;
 
 /* Função que define o tamanho da fila, respeitando o limite piso de sqrt(N) 
  * e definindo os controladores da fila (frente e retaguarda) para começarem em 0 */
-void definir_fila(int n){
+void definirFila(int n){
 	FilaClientes.tamanho = floor(sqrt(n));
 	FilaClientes.mFila = (Cliente *) malloc (FilaClientes.tamanho * sizeof(Cliente));
 	FilaClientes.frente = 0;
@@ -33,12 +33,12 @@ void definir_fila(int n){
 }
 		
 // Função que verifica se a fila não contém nenhum elemento
-int fila_vazia(){
+int filaEstaVazia(){
 	return (FilaClientes.frente == 0);
 }
 
 // Função que verifica se a fila está em sua capacidade máxima 
-int FilaCheia(){
+int filaEstaCheia(){
 	posicaoAtual = FilaClientes.retaguarda % FilaClientes.tamanho+1;
 	return (posicaoAtual == FilaClientes.frente);
 }
@@ -50,26 +50,26 @@ void criarCliente(int codigo, int operacao, int valor){
 	novo.codigo = codigo;
 	novo.operacao = operacao;
 	novo.valor = valor;
-	inserir_fila(novo);
+	inserirFila(novo);
 }
 
 /* Função que insere o cliente na fila, respeitando as regras de uma fila circular.
  * Caso a fila encha, no decorrer do programa, o primeiro cliente da fila é removido e inserido na pilha de algum caixa */
-void inserir_fila(Cliente cliente){
-	if(FilaCheia()){
-		Cliente auxiliar = remover_fila();
-		atender_cliente(auxiliar);
+void inserirFila(Cliente cliente){
+	if(filaEstaCheia()){
+		Cliente auxiliar = removerDaFila();
+		atenderCliente(auxiliar);
 	}
 	FilaClientes.retaguarda = posicaoAtual;
 	FilaClientes.mFila[FilaClientes.retaguarda-1] = cliente;
-	if(fila_vazia())
+	if(filaEstaVazia())
 		FilaClientes.frente = 1;
 }
 
-// Função que remove o primeiro cliente da fila atualizando o controlador da frente e da retaguarda da fila 
-Cliente remover_fila(){
+// Função que remove o primeiro cliente da fila atualizando os controladores de frente e retaguarda da fila 
+Cliente removerDaFila(){
 	Cliente cliente;
-	if(!fila_vazia()){
+	if(!filaEstaVazia()){
 		cliente = FilaClientes.mFila[FilaClientes.frente-1];
 		if(FilaClientes.frente == FilaClientes.retaguarda)
 			FilaClientes.retaguarda = FilaClientes.frente = 0;
@@ -80,9 +80,9 @@ Cliente remover_fila(){
 }
 
 // Função que percorre a fila toda, após o banco chegar em seu limite de n clientes, atendendo os clientes restantes na fila
-void processa_dados(){
-	while(!fila_vazia()){
-		Cliente auxiliar = remover_fila();
-		atender_cliente(auxiliar);
+void processaDados(){
+	while(!filaEstaVazia()){
+		Cliente auxiliar = removerDaFila();
+		atenderCliente(auxiliar);
 	}
 }
