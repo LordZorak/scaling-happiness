@@ -63,10 +63,14 @@ Relatorio* alocaNovoElemento(Cliente cliente){
 
 // Função que efetua as operações do cliente e atualiza sua quantidade 
 void efetuarOperacoes(Relatorio *rel, Cliente cliente){
-	if(cliente.operacao == 0)
-		rel->saldoCliente += cliente.valor; 
-	else
+	if(cliente.operacao == 0){
+		rel->saldoCliente += cliente.valor;
+		//printf("%d-", cliente.valor);
+	}
+	else{
 		rel->saldoCliente -= cliente.valor;
+		//printf("%d-", cliente.valor);
+	}
 	rel->quantidadeOperacoes++;
 }	
 

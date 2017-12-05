@@ -41,9 +41,10 @@ void definir_pilha(int n, int m){
 	meus_caixas.caixas = (Caixa*) malloc (m * sizeof(Caixa)); 
 	int i;
 	for(i=0;i<m;i++){
-		meus_caixas.caixas[i].pilhaClientes = (Cliente *) malloc(ceil(n/m) * sizeof(Cliente)); 
+		int tam = ceil(n/m) + 1;
+		meus_caixas.caixas[i].pilhaClientes = (Cliente *) malloc(tam * sizeof(Cliente)); 
 		meus_caixas.caixas[i].topo = 0; 
-		meus_caixas.caixas[i].tamanho = ceil(n/m);
+		meus_caixas.caixas[i].tamanho = tam;
 	}
 	meus_caixas.ultimo_inserido = 0;
 }
