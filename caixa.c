@@ -18,7 +18,7 @@ typedef struct Caixa{
 	int tamanho;
 }Caixa;
 
-/* Declaração de um registro para facilitara a manipulação dos caixas 
+/* Declaração de um registro para facilitar a manipulação dos caixas 
  * Para não sobrecarregar um caixa, adotamos como regra de negócio que ele adiciona um cliente em um caixa por vez 
  * verificando onde o último cliente foi inserido */
 typedef struct bateria_caixas{
@@ -38,10 +38,10 @@ Cliente *PilhaClientes;
 void definirPilha(int n, int m){ 
 	numeroCaixas = m;
 	numeroClientes = n;
-	meus_caixas.caixas = (Caixa*) malloc (m * sizeof(Caixa)); 
+	meus_caixas.caixas = (Caixa*) malloc (numeroCaixas* sizeof(Caixa)); 
 	int i;
 	for(i=0;i<m;i++){
-		int tam = ceil(n/m) + 1;
+		int tam = ceil(numeroClientes * 1.0 / numeroCaixas * 1.0);
 		meus_caixas.caixas[i].pilhaClientes = (Cliente *) malloc(tam * sizeof(Cliente)); 
 		meus_caixas.caixas[i].topo = 0; 
 		meus_caixas.caixas[i].tamanho = tam;
@@ -50,7 +50,7 @@ void definirPilha(int n, int m){
 }
 
 // Função pra atender clientes adicionando o cliente no topo da pilha do próximo caixa livre sem a capacidade máxima atingida
-void atenderCliente(Cliente cliente){
+void atenderCliente(Cliente primeiroDaFila){
 	int topoAtual;
 	if (limiteDeCaixas(meus_caixas.ultimo_inserido))
 			meus_caixas.ultimo_inserido = 0;
@@ -60,7 +60,7 @@ void atenderCliente(Cliente cliente){
 	
 	topoAtual = meus_caixas.caixas[meus_caixas.ultimo_inserido].topo += 1; 
 		
-	meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes[topoAtual] = cliente;
+	meus_caixas.caixas[meus_caixas.ultimo_inserido].pilhaClientes[topoAtual] = primeiroDaFila;
 	meus_caixas.ultimo_inserido++;
 }
 

@@ -5,11 +5,11 @@
 typedef struct minhafila minhafila;
 typedef struct cliente Cliente;
 
-void definirFila(int n);
+void definirFila(int numeroClientes);
 int filaEstaVazia();
 void criarCliente(int codigo, int operacao, int valor);
 int filaEstaCheia();
-void inserirFila(Cliente cliente);
+void inserirFila(Cliente novoCliente);
 Cliente removerDaFila();
 void processaDados();
 

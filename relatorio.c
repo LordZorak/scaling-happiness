@@ -43,64 +43,64 @@ void processarOperacoes(){
 	definirLista();
 	while (!limiteDeCaixas(i)) {
 		while (getTopo(i)){
-			Cliente novo = desempilharCliente(i);
-			inserirClienteNaLista(novo);
+			Cliente clienteAtendido = desempilharCliente(i);
+			inserirClienteNaLista(clienteAtendido);
 		}
 		i++;
 	}
 }
 
 // Função que aloca os dados do cliente necessários para a saida em um elemento da lista
-Relatorio* alocaNovoElemento(Cliente cliente){
-	Relatorio *novo;
-	novo = (Relatorio *) malloc (1 * sizeof(Relatorio));
-	novo->codigo = cliente.codigo;
-	novo->quantidadeOperacoes = 0;
-	novo->saldoCliente = 0;
-	novo->anterior =  NULL;
-	novo->proximo = NULL;
-	return novo;
+Relatorio* alocaNovoElemento(Cliente novoCliente){
+	Relatorio *novoRegistro;
+	novoRegistro = (Relatorio *) malloc (1 * sizeof(Relatorio));
+	novoRegistro->codigo = novoCliente.codigo;
+	novoRegistro->quantidadeOperacoes = 0;
+	novoRegistro->saldoCliente = 0;
+	novoRegistro->anterior =  NULL;
+	novoRegistro->proximo = NULL;
+	return novoRegistro;
 }
 
 // Função que efetua as operações, e atualiza sua quantidade, do cliente  
-void efetuarOperacoes(Relatorio *rel, Cliente cliente){
-	if(cliente.operacao == 0)
-		rel->saldoCliente += cliente.valor;
+void efetuarOperacoes(Relatorio *relatorioFinal, Cliente clienteAtendido){
+	if(clienteAtendido.operacao == 0)
+		relatorioFinal->saldoCliente += clienteAtendido.valor;
 	else
-		rel->saldoCliente -= cliente.valor;
-	rel->quantidadeOperacoes++;
+		relatorioFinal->saldoCliente -= clienteAtendido.valor;
+	relatorioFinal->quantidadeOperacoes++;
 }	
 
 // Função que verifica se um cliente já existe na lista
-Relatorio* pesquisaCliente(Cliente cliente){
+Relatorio* pesquisaCliente(Cliente clienteAtendido){
 	Relatorio *ultimo;
 	ultimo = mRelatorios.cabeca->anterior;
-	Relatorio *n_encontrou = mRelatorios.cabeca;
-	if(cliente.codigo <= ultimo->codigo){
-		Relatorio *ponteiro = mRelatorios.cabeca->proximo;
-		while(ponteiro->codigo < cliente.codigo){
-			ponteiro = ponteiro->proximo;
+	Relatorio *clienteNaoEncontrado = mRelatorios.cabeca;
+	if(clienteAtendido.codigo <= ultimo->codigo){
+		Relatorio *clienteEncontrado = mRelatorios.cabeca->proximo;
+		while(clienteEncontrado->codigo < clienteAtendido.codigo){
+			clienteEncontrado = clienteEncontrado->proximo;
 		}
-		return ponteiro;
+		return clienteEncontrado;
 	}else{
-		return n_encontrou;
+		return clienteNaoEncontrado;
 	}
 }
 
 // Função que insere um cliente na lista caso não exista um registro anterior. Caso exista o atualiza
-void inserirClienteNaLista(Cliente cliente){
-	Relatorio *ponteiro = pesquisaCliente(cliente);
-	if(ponteiro->codigo!=cliente.codigo){
+void inserirClienteNaLista(Cliente clienteAtendido){
+	Relatorio *ponteiro = pesquisaCliente(clienteAtendido);
+	if(ponteiro->codigo!=clienteAtendido.codigo){
 		Relatorio *anterior = ponteiro->anterior;
-		Relatorio *novo = alocaNovoElemento(cliente);
-		efetuarOperacoes(novo, cliente);
-		novo->anterior = anterior;
-		novo->proximo= ponteiro;
-		anterior->proximo = novo;
-		ponteiro->anterior = novo;
+		Relatorio *novoCliente = alocaNovoElemento(clienteAtendido);
+		efetuarOperacoes(novoCliente, clienteAtendido);
+		novoCliente->anterior = anterior;
+		novoCliente->proximo= ponteiro;
+		anterior->proximo = novoCliente;
+		ponteiro->anterior = novoCliente;
 		mRelatorios.contadorClientesDistintos++;
 	}else{
-		efetuarOperacoes(ponteiro, cliente);
+		efetuarOperacoes(ponteiro, clienteAtendido);
 	}		
 }
 
